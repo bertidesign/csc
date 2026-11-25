@@ -17,9 +17,9 @@ export default async function ResponsesPage() {
   for (const answer of answers) grouped.set(answer.responseId, [...(grouped.get(answer.responseId) ?? []), answer]);
 
   return <>
-    <div className="page-heading"><div><h1>Risposte</h1><p>Le risposte sono anonime. Mostriamo fino alle 200 più recenti.</p></div></div>
+    <div className="page-heading"><div><h1>Risposte</h1><p>Le risposte sono anonime; qui trovi le 200 più recenti.</p></div></div>
     {rows.length ? <div className="response-list">{rows.map((row) => <article className="panel response-card" key={row.responseId}>
-      <div className="response-card-heading"><div><h2>{row.surveyTitle}</h2><p>{new Intl.DateTimeFormat("it-IT", { dateStyle: "medium", timeStyle: "short", timeZone: "Europe/Rome" }).format(row.submittedAt)}</p></div><span className="status-chip">Anonima</span></div>
+      <div className="response-card-heading"><div><h2>{row.surveyTitle}</h2><p>{new Intl.DateTimeFormat("it-IT", { dateStyle: "medium", timeStyle: "short", timeZone: "Europe/Rome" }).format(row.submittedAt)}</p></div></div>
       <dl className="answer-list">{(grouped.get(row.responseId) ?? []).map((answer) => <div className="answer-row" key={`${row.responseId}-${answer.prompt}`}><dt>{answer.prompt}</dt><dd>{answer.kind === "scale" ? answer.numericValue : answer.textValue || "—"}</dd></div>)}</dl>
     </article>)}</div> : <div className="empty-panel"><strong>Nessuna risposta ancora</strong>Quando un cliente compilerà un questionario attivo, troverai qui le sue risposte anonime.</div>}
   </>;

@@ -48,7 +48,7 @@ export function AppShell({
 
         <div className="rail-footnote">
           <span className="weather-mark" aria-hidden="true" />
-          <span>Feedback, letto nel tempo</span>
+          <span>Ascolta e migliora</span>
         </div>
       </aside>
 
