@@ -33,10 +33,12 @@ export async function createTenantAction(formData: FormData) {
   if (!parsed.success) redirect("/admin/tenants?error=tenant");
 
   const client = await clerkClient();
-  const organization = await client.organizations.createOrganization({
-    name: parsed.data.name,
-    createdBy: userId,
-  });
+  const organization = await client.organizations
+    .createOrganization({ name: parsed.data.name, createdBy: userId })
+    .catch((error: unknown) => {
+      console.error("Failed to create Clerk organization", error);
+      redirect("/admin/tenants?error=create");
+    });
 
   try {
     await getDb().insert(tenants).values({
@@ -46,7 +48,8 @@ export async function createTenantAction(formData: FormData) {
     });
   } catch (error) {
     await client.organizations.deleteOrganization(organization.id).catch(() => undefined);
-    throw error;
+    console.error("Failed to save customer space", error);
+    redirect("/admin/tenants?error=create");
   }
 
   revalidatePath("/admin/tenants");

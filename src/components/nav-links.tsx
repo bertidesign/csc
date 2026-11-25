@@ -14,7 +14,7 @@ const tenantLinks = [
 export function NavLinks({ isPlatformAdmin }: { isPlatformAdmin: boolean }) {
   const pathname = usePathname();
   const links = isPlatformAdmin
-    ? [...tenantLinks, { href: "/admin/tenants", label: "Tenant", icon: Building2 }]
+    ? [...tenantLinks, { href: "/admin/tenants", label: "Clienti", icon: Building2 }]
     : tenantLinks;
 
   return (

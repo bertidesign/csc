@@ -11,7 +11,7 @@ export default async function SettingsPage({ searchParams }: { searchParams: Sea
     {query.saved ? <p className="notice is-success" role="status">Brand aggiornato.</p> : null}
     {query.error ? <p className="notice" role="alert">Il colore o l’indirizzo del logo non è valido.</p> : null}
     <div className="form-layout">
-      <section className="form-section"><h2>Identità visiva</h2><p>Il nome del tenant è {tenant.name}. Per ora puoi cambiare logo e colore principale.</p>
+      <section className="form-section"><h2>Identità visiva</h2><p>Lo spazio cliente si chiama {tenant.name}. Puoi personalizzarne logo e colore principale.</p>
         <form className="field-stack" action={updateBrandAction}>
           <div className="field"><label htmlFor="brandColor">Colore principale</label><input id="brandColor" name="brandColor" type="color" defaultValue={tenant.brandColor} required /><small>Usato nei pulsanti e negli elementi del questionario pubblico.</small></div>
           <div className="field"><label htmlFor="logoUrl">URL del logo</label><input id="logoUrl" name="logoUrl" type="url" inputMode="url" defaultValue={tenant.logoUrl ?? ""} placeholder="https://…" /><small>Inserisci un indirizzo HTTPS diretto a un’immagine.</small></div>

@@ -14,9 +14,9 @@ export function OrganizationSwitcher({ activeOrgId }: { activeOrgId: string }) {
 
   return (
     <label className="tenant-switcher">
-      <span className="sr-only">Cambia tenant</span>
+      <span className="sr-only">Cambia spazio cliente</span>
       <select
-        aria-label="Cambia tenant"
+        aria-label="Cambia spazio cliente"
         value={activeOrgId}
         onChange={(event) => {
           void setActive({ organization: event.target.value }).then(() => router.refresh());
