@@ -33,18 +33,22 @@ export async function createSurveyAction(formData: FormData) {
   });
   if (!parsed.success) redirect("/surveys?error=survey");
 
-  await getDb().insert(surveys).values({
+  const [survey] = await getDb().insert(surveys).values({
     tenantId: tenant.id,
     title: parsed.data.title,
     description: parsed.data.description,
-  });
+  }).returning({ id: surveys.id });
 
   revalidatePath("/surveys");
-  redirect("/surveys?created=1");
+  redirect(`/surveys?created=1&survey=${survey.id}`);
 }
 
 export async function addQuestionAction(formData: FormData) {
   const { tenant } = await requireTenantContext();
+  const requestedSurveyId = z.string().uuid().safeParse(formData.get("surveyId"));
+  const errorUrl = requestedSurveyId.success
+    ? `/surveys?survey=${requestedSurveyId.data}&error=`
+    : "/surveys?error=";
   const kind = formData.get("kind");
   const rawMin = formData.get("min");
   const rawMax = formData.get("max");
@@ -60,21 +64,21 @@ export async function addQuestionAction(formData: FormData) {
     isSegment: formData.get("isSegment") === "on",
   });
 
-  if (!parsed.success) redirect("/surveys?error=question");
+  if (!parsed.success) redirect(`${errorUrl}question`);
   const input = parsed.data;
   if ((input.kind === "scale" && input.max <= input.min) ||
       (input.metric === "score" && input.kind !== "scale") ||
       (input.metric === "nps" && (input.kind !== "scale" || input.min !== 0 || input.max !== 10)) ||
       (input.metric === "csat" && (input.kind !== "scale" || input.min !== 1 || input.max !== 5)) ||
       (input.isSegment && input.kind !== "choice")) {
-    redirect("/surveys?error=question-config");
+    redirect(`${errorUrl}question-config`);
   }
 
   const options = input.kind === "choice"
     ? [...new Set(input.options.split("\n").map((option) => option.trim()).filter(Boolean))]
     : [];
   if (input.kind === "choice" && (options.length < 2 || options.length > 20)) {
-    redirect("/surveys?error=question-options");
+    redirect(`${errorUrl}question-options`);
   }
 
   const db = getDb();
@@ -83,7 +87,7 @@ export async function addQuestionAction(formData: FormData) {
     .from(surveys)
     .where(and(eq(surveys.id, input.surveyId), eq(surveys.tenantId, tenant.id)))
     .limit(1);
-  if (!survey) redirect("/surveys?error=survey-not-found");
+  if (!survey) redirect(`${errorUrl}survey-not-found`);
   if (survey.status !== "draft") redirect(`/surveys?survey=${survey.id}&error=active-survey`);
 
   const [position] = await db

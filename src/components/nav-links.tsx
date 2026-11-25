@@ -6,7 +6,7 @@ import { Activity, Building2, ClipboardList, MessageSquareText, Settings } from 
 
 const tenantLinks = [
   { href: "/dashboard", label: "Panoramica", icon: Activity },
-  { href: "/surveys", label: "Survey", icon: ClipboardList },
+  { href: "/surveys", label: "Questionari", icon: ClipboardList },
   { href: "/responses", label: "Risposte", icon: MessageSquareText },
   { href: "/settings", label: "Impostazioni", icon: Settings },
 ];

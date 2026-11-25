@@ -14,7 +14,7 @@ export default async function HomePage() {
           <Link className="button" href={session.userId ? (session.orgId ? "/dashboard" : "/admin/tenants") : "/sign-in"}>
             {session.userId ? "Apri CSC" : "Accedi"}
           </Link>
-          <span className="home-detail">Spazi separati · report chiari · brand del tenant</span>
+          <span className="home-detail">Questionari semplici · risposte anonime · logo e colori personalizzati</span>
         </div>
       </section>
     </main>
